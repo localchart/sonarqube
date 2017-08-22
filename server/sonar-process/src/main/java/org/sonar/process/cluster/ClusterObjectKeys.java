@@ -52,6 +52,10 @@ public final class ClusterObjectKeys {
    */
   public static final String SONARQUBE_VERSION = "SONARQUBE_VERSION";
   /**
+   * The key of atomic reference holding the name of the cluster (used for precondition checks)
+   */
+  public static final String CLUSTER_NAME = "CLUSTER_NAME";
+  /**
    * The key of the Set holding the UUIDs of clients
    */
   public static final String CLIENT_UUIDS = "CLIENT_UUIDS";

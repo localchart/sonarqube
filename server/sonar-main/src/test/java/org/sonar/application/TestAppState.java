@@ -78,6 +78,11 @@ public class TestAppState implements AppState {
   }
 
   @Override
+  public void registerClusterName(String clusterName) {
+    // nothing to do
+  }
+
+  @Override
   public Optional<String> getLeaderHostName() {
     return Optional.of(NetworkUtils.getHostName());
   }

@@ -34,9 +34,9 @@ import static org.sonar.process.cluster.ClusterObjectKeys.CLIENT_UUIDS;
 
 public class HazelcastTestHelper {
 
-  public static HazelcastInstance createHazelcastCluster(String clusterName, int port) {
+  public static HazelcastInstance createHazelcastCluster(int port) {
     Config hzConfig = new Config();
-    hzConfig.getGroupConfig().setName(clusterName);
+    hzConfig.getGroupConfig().setName("sonarqube");
 
     // Configure the network instance
     NetworkConfig netConfig = hzConfig.getNetworkConfig();

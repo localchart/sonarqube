@@ -43,12 +43,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.sonar.application.AppStateListener;
+import org.sonar.process.MessageException;
 import org.sonar.process.NodeType;
 import org.sonar.process.ProcessId;
 
 import static java.util.stream.Collectors.toList;
+import static org.sonar.application.cluster.ClusterProperties.HAZELCAST_CLUSTER_NAME;
 import static org.sonar.process.NetworkUtils.getHostName;
 import static org.sonar.process.cluster.ClusterObjectKeys.CLIENT_UUIDS;
+import static org.sonar.process.cluster.ClusterObjectKeys.CLUSTER_NAME;
 import static org.sonar.process.cluster.ClusterObjectKeys.HOSTNAME;
 import static org.sonar.process.cluster.ClusterObjectKeys.LEADER;
 import static org.sonar.process.cluster.ClusterObjectKeys.NODE_TYPE;
@@ -149,6 +152,28 @@ public class HazelcastCluster implements AutoCloseable {
     }
   }
 
+  public void registerClusterName(String nodeValue) {
+    IAtomicReference<String> property = hzInstance.getAtomicReference(CLUSTER_NAME);
+    if (property.get() == null) {
+      ILock lock = hzInstance.getLock(CLUSTER_NAME);
+      lock.lock();
+      try {
+        if (property.get() == null) {
+          property.set(nodeValue);
+        }
+      } finally {
+        lock.unlock();
+      }
+    }
+
+    String clusterValue = property.get();
+    if (!property.get().equals(nodeValue)) {
+      throw new MessageException(
+        String.format("This node has a cluster name %s, which does not match %s from the cluster", nodeValue, clusterValue)
+      );
+    }
+  }
+
   @Override
   public void close() {
     if (hzInstance != null) {
@@ -172,7 +197,7 @@ public class HazelcastCluster implements AutoCloseable {
 
   public static HazelcastCluster create(ClusterProperties clusterProperties) {
     Config hzConfig = new Config();
-    hzConfig.getGroupConfig().setName(clusterProperties.getName());
+    hzConfig.getGroupConfig().setName(HAZELCAST_CLUSTER_NAME);
 
     // Configure the network instance
     NetworkConfig netConfig = hzConfig.getNetworkConfig();

@@ -138,12 +138,12 @@ public class HazelcastClusterTest {
   }
 
   @Test
-  public void cluster_name_comes_from_configuration() {
+  public void hazelcast_cluster_name_is_hardcoded_and_not_affected_by_settings() {
     TestAppSettings testAppSettings = newClusterSettings();
     testAppSettings.set(CLUSTER_NAME, "a_cluster_");
     ClusterProperties clusterProperties = new ClusterProperties(testAppSettings);
     try (HazelcastCluster hzCluster = HazelcastCluster.create(clusterProperties)) {
-      assertThat(hzCluster.getName()).isEqualTo("a_cluster_");
+      assertThat(hzCluster.getName()).isEqualTo("sonarqube");
     }
   }
 

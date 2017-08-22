@@ -68,6 +68,11 @@ public class AppStateImpl implements AppState {
   }
 
   @Override
+  public void registerClusterName(String clusterName) {
+    // Nothing to do on non clustered version
+  }
+
+  @Override
   public Optional<String> getLeaderHostName() {
     return Optional.of(NetworkUtils.getHostName());
   }
