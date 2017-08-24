@@ -60,7 +60,7 @@ public class HealthCheckerImplTest {
   public void checks_returns_YELLOW_status_if_only_GREEN_and_at_least_one_YELLOW_statuses_returned_by_HealthChecks() {
     List<Health.Status> statuses = new ArrayList<>();
     Stream.concat(
-      IntStream.range(1, 1 + random.nextInt(20)).mapToObj(i -> YELLOW), // at least 1 YELLOW
+      IntStream.range(0, 1 + random.nextInt(20)).mapToObj(i -> YELLOW), // at least 1 YELLOW
       IntStream.range(0, random.nextInt(20)).mapToObj(i -> GREEN)).forEach(statuses::add); // between 0 and 19 GREEN
     Collections.shuffle(statuses);
     HealthCheckerImpl underTest = newHealthCheckerImpl(statuses.stream());
@@ -74,7 +74,7 @@ public class HealthCheckerImplTest {
   public void checks_returns_RED_status_if_at_least_one_RED_status_returned_by_HealthChecks() {
     List<Health.Status> statuses = new ArrayList<>();
     Stream.of(
-      IntStream.range(1, 1 + random.nextInt(20)).mapToObj(i -> RED), // at least 1 RED
+      IntStream.range(0, 1 + random.nextInt(20)).mapToObj(i -> RED), // at least 1 RED
       IntStream.range(0, random.nextInt(20)).mapToObj(i -> YELLOW), // between 0 and 19 YELLOW
       IntStream.range(0, random.nextInt(20)).mapToObj(i -> GREEN) // between 0 and 19 GREEN
     ).flatMap(s -> s)
@@ -89,7 +89,7 @@ public class HealthCheckerImplTest {
 
   @Test
   public void checks_returns_causes_of_all_HealthChecks_whichever_their_status() {
-    HealthCheck[] healthChecks = IntStream.range(1, 1 + random.nextInt(20))
+    HealthCheck[] healthChecks = IntStream.range(0, 1 + random.nextInt(20))
       .mapToObj(s -> new StaticHealthCheck(IntStream.range(0, random.nextInt(3)).mapToObj(i -> RandomStringUtils.randomAlphanumeric(3)).toArray(String[]::new)))
       .map(HealthCheck.class::cast)
       .toArray(HealthCheck[]::new);
