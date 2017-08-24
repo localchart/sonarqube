@@ -74,12 +74,10 @@ export default class ComponentNavBranch extends React.PureComponent<Props, State
   };
 
   togglePopup = (show?: boolean) => {
-    if (this.mounted) {
-      if (show != undefined) {
-        this.setState({ singleBranchPopupOpen: show });
-      } else {
-        this.setState(state => ({ singleBranchPopupOpen: !state.singleBranchPopupOpen }));
-      }
+    if (show != undefined) {
+      this.setState({ singleBranchPopupOpen: show });
+    } else {
+      this.setState(state => ({ singleBranchPopupOpen: !state.singleBranchPopupOpen }));
     }
   };
 

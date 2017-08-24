@@ -75,3 +75,15 @@ it('opens menu', () => {
   click(wrapper.find('a'));
   expect(wrapper.find('ComponentNavBranchesMenu')).toHaveLength(1);
 });
+
+it('renders single branch popup', () => {
+  const branch: MainBranch = { isMain: true, name: 'master' };
+  const component = {} as Component;
+  const wrapper = shallow(
+    <ComponentNavBranch branches={[branch]} currentBranch={branch} project={component} />
+  );
+  expect(wrapper).toMatchSnapshot();
+  expect(wrapper.find('BubblePopupHelper').prop('isOpen')).toBe(false);
+  click(wrapper.find('a'));
+  expect(wrapper.find('BubblePopupHelper').prop('isOpen')).toBe(true);
+});
