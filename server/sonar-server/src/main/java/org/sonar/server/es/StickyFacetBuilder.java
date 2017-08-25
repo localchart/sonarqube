@@ -37,6 +37,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Order;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 
+import static java.lang.Math.max;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 
 public class StickyFacetBuilder {
@@ -44,6 +45,7 @@ public class StickyFacetBuilder {
   private static final int FACET_DEFAULT_MIN_DOC_COUNT = 1;
   private static final int FACET_DEFAULT_SIZE = 10;
   private static final Order FACET_DEFAULT_ORDER = Terms.Order.count(false);
+  private static final int MAXIMUM_NUMBER_OF_SELECTED_ITEMS_WHOSE_DOC_COUNT_WILL_BE_CALCULATED = 50;
   private static final Collector<CharSequence, ?, String> PIPE_JOINER = Collectors.joining("|");
 
   private final QueryBuilder query;
@@ -146,6 +148,7 @@ public class StickyFacetBuilder {
       .collect(PIPE_JOINER);
 
     TermsBuilder selectedTerms = AggregationBuilders.terms(facetName + "_selected")
+      .size(max(MAXIMUM_NUMBER_OF_SELECTED_ITEMS_WHOSE_DOC_COUNT_WILL_BE_CALCULATED, includes.length()))
       .field(fieldName)
       .include(includes);
     if (subAggregation != null) {
