@@ -35,6 +35,7 @@ import org.sonar.db.component.BranchDto;
 import org.sonar.db.component.BranchKeyType;
 import org.sonar.db.component.BranchType;
 import org.sonar.db.component.ComponentDto;
+import org.sonar.server.computation.task.projectanalysis.component.BranchLoader;
 import org.sonar.server.es.ProjectIndexer.Cause;
 import org.sonar.server.es.ProjectIndexers;
 import org.sonar.server.favorite.FavoriteUpdater;
@@ -120,7 +121,7 @@ public class ComponentUpdater {
       .setBranchType(BranchType.LONG)
       .setKeeType(BranchKeyType.BRANCH)
       .setUuid(componentUuid)
-      .setKey(null)
+      .setKey(BranchLoader.DEFAULT_MAIN_BRANCH_NAME)
       .setMergeBranchUuid(null)
       .setPullRequestTitle(null)
       .setProjectUuid(componentUuid);

@@ -33,6 +33,7 @@ import org.sonar.db.component.BranchType;
 import org.sonar.db.component.ComponentDto;
 import org.sonar.db.organization.OrganizationDto;
 import org.sonar.db.user.UserDto;
+import org.sonar.server.computation.task.projectanalysis.component.BranchLoader;
 import org.sonar.server.es.ProjectIndexer;
 import org.sonar.server.es.TestProjectIndexers;
 import org.sonar.server.exceptions.BadRequestException;
@@ -102,7 +103,7 @@ public class ComponentUpdaterTest {
     Optional<BranchDto> branch = db.getDbClient().branchDao().selectByUuid(db.getSession(), returned.uuid());
     assertThat(branch).isPresent();
     assertThat(branch.get().getKeeType()).isEqualTo(BranchKeyType.BRANCH);
-    assertThat(branch.get().getKey()).isNull();
+    assertThat(branch.get().getKey()).isEqualTo(BranchLoader.DEFAULT_MAIN_BRANCH_NAME);
     assertThat(branch.get().getMergeBranchUuid()).isNull();
     assertThat(branch.get().getPullRequestTitle()).isNull();
     assertThat(branch.get().getBranchType()).isEqualTo(BranchType.LONG);

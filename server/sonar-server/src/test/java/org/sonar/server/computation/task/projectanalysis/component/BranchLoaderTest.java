@@ -62,7 +62,7 @@ public class BranchLoaderTest {
 
     Branch branch = metadataHolder.getBranch().get();
     assertThat(branch.isMain()).isTrue();
-    assertThat(branch.getName()).isEmpty();
+    assertThat(branch.getName().get()).isEqualTo(BranchLoader.DEFAULT_MAIN_BRANCH_NAME);
   }
 
   @Test
