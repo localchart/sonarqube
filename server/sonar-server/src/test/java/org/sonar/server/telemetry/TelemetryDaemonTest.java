@@ -86,8 +86,8 @@ public class TelemetryDaemonTest {
     settings = new MapSettings(new PropertyDefinitions(TelemetryProperties.all()));
     system2.setNow(System.currentTimeMillis());
 
-    underTest = new TelemetryDaemon(client, settings.asConfig(), internalProperties, server, pluginRepository, system2, new UserIndex(es.client()),
-      new ProjectMeasuresIndex(es.client(), null));
+    underTest = new TelemetryDaemon(new TelemetryDataLoader(server, pluginRepository, new UserIndex(es.client()), new ProjectMeasuresIndex(es.client(), null)), client,
+      settings.asConfig(), internalProperties, system2);
   }
 
   @Test
